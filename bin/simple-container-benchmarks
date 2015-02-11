@@ -72,7 +72,7 @@ destfile=$(echo $(date)$(hostname) | md5sum)$destfilesuffix
 
 # move the file to Manta
 mmkdir ~~/stor/simple-container-benchmarks
-mput ~/simple-container-benchmarks.txt ~~/stor/simple-container-benchmarks/$destfile
+mput -f ~/simple-container-benchmarks.txt ~~/stor/simple-container-benchmarks/$destfile
 
 # report
 echo ~/simple-container-benchmarks.txt
