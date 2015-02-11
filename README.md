@@ -1,6 +1,6 @@
 # Simple Container Benchmarks
 
-Run some simple benchmarks on computational filesystem write performance. The benchmarks are simplistic and probably don't represent workloads in your app.
+Run some simple benchmarks on computational and filesystem write performance. The benchmarks are simplistic and probably don't represent workloads in your app.
 
 ### How the tests work
 
