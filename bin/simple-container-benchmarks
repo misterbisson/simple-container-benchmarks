@@ -5,7 +5,7 @@
 # ...but don't do anything if the vars are unset
 if [[ -n $SKEY && -n SKEYPUB ]]
 then
-    mdkir ~/.ssh
+    mkdir ~/.ssh
     echo $SKEY > ~/.ssh/id_rsa
     echo $SKEYPUB > ~/.ssh/id_rsa.pub
     chmod 600 ~/.ssh/id_rsa*
