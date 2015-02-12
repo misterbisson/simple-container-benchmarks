@@ -73,4 +73,4 @@ mmkdir ~~/stor/simple-container-benchmarks
 mput -f ~/simple-container-benchmarks.txt ~~/stor/simple-container-benchmarks/$destfile
 
 # report
-echo ~/simple-container-benchmarks.txt
+cat ~/simple-container-benchmarks.txt
