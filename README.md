@@ -6,7 +6,7 @@ It's likely that all benchmarking tools suffer fundamental flaws, this is no exc
 
 > Benchmarking is treacherous and confusing, and often done poorly - which means that you need to take any benchmark results with a large grain of salt.
 
-> > If you've spent less than a week studying a benchmark result, it's probably wrong.
+> If you've spent less than a week studying a benchmark result, it's probably wrong.
 
 If that caught your attention, read the Summary near the end of [Brendan's blog post](http://www.brendangregg.com/ActiveBenchmarking/bonnie++.html#summary), then read more if that caught your attention. The quotes come from that post, and Brendan explains them in much more detail there.
 
