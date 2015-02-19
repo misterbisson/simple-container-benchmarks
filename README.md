@@ -45,14 +45,14 @@ They're in Manta and in the `docker logs $container_id`.
 Start the container with these args to send the Manta environment vars and SSH key:
 
 ```
-sudo docker run -d \
+sudo docker run -d --restart=no \
 -e "MANTA_URL=$MANTA_URL" \
 -e "MANTA_USER=$MANTA_USER" \
 -e "MANTA_SUBUSER=$MANTA_SUBUSER" \
 -e "MANTA_KEY_ID=$MANTA_KEY_ID" \
 -e "SKEY=`cat ~/.ssh/id_rsa`" \
 -e "SKEYPUB=`cat ~/.ssh/id_rsa.pub`" \
--e "DOCKER_HOST=DOCKER_HOST" \
+-e "DOCKER_HOST=$DOCKER_HOST" \
 misterbisson/simple-container-benchmarks
 ```
 
@@ -61,14 +61,14 @@ Use `printenv` to inspect the value of the environment variables the above `dock
 You can loop it to start three at a time:
 
 ```
-i=0; while [ $i -lt 3 ]; do sudo docker run -d \
+i=0; while [ $i -lt 3 ]; do sudo docker run -d --restart=no \
 -e "MANTA_URL=$MANTA_URL" \
 -e "MANTA_USER=$MANTA_USER" \
 -e "MANTA_SUBUSER=$MANTA_SUBUSER" \
 -e "MANTA_KEY_ID=$MANTA_KEY_ID" \
 -e "SKEY=`cat ~/.ssh/id_rsa`" \
 -e "SKEYPUB=`cat ~/.ssh/id_rsa.pub`" \
--e "DOCKER_HOST=DOCKER_HOST" \
+-e "DOCKER_HOST=$DOCKER_HOST" \
 misterbisson/simple-container-benchmarks; \
 i=$[$i+1]; sleep 1; done
 ```
@@ -76,14 +76,14 @@ i=$[$i+1]; sleep 1; done
 Or, why not start 30?
 
 ```
-i=0; while [ $i -lt 30 ]; do sudo docker run -d \
+i=0; while [ $i -lt 30 ]; do sudo docker run -d --restart=no \
 -e "MANTA_URL=$MANTA_URL" \
 -e "MANTA_USER=$MANTA_USER" \
 -e "MANTA_SUBUSER=$MANTA_SUBUSER" \
 -e "MANTA_KEY_ID=$MANTA_KEY_ID" \
 -e "SKEY=`cat ~/.ssh/id_rsa`" \
 -e "SKEYPUB=`cat ~/.ssh/id_rsa.pub`" \
--e "DOCKER_HOST=DOCKER_HOST" \
+-e "DOCKER_HOST=$DOCKER_HOST" \
 misterbisson/simple-container-benchmarks; \
 i=$[$i+1]; sleep 1; done
 ```
