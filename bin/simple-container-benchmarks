@@ -22,7 +22,7 @@ echo '------------------------------' >> ~/simple-container-benchmarks.txt
 echo 'Performance benchmarks' >> ~/simple-container-benchmarks.txt
 echo '------------------------------' >> ~/simple-container-benchmarks.txt
 echo 'hostname: '$(hostname) >> ~/simple-container-benchmarks.txt
-echo "dockerhost: DOCKER_HOST" >> ~/simple-container-benchmarks.txt
+echo "dockerhost: $DOCKER_HOST" >> ~/simple-container-benchmarks.txt
 echo 'date: '$(date) >> ~/simple-container-benchmarks.txt
 
 
