@@ -39,13 +39,14 @@ Check `docker logs $container_id`.
 Start the server container:
 
 ```
-sudo docker run -d -p 80:80 --name=simple-container-benchmarks misterbisson/simple-container-benchmarks
+sudo docker run -d -p 80:80 --name=simple-container-benchmarks-server misterbisson/simple-container-benchmarks
 ```
 
 Start the client container to read from the server we just started:
 
 ```
 sudo docker run -d \
+ --name=simple-container-benchmarks-client \
 -e "DOCKER_HOST=$DOCKER_HOST" \
 -e "TARGET=$(docker inspect --format='{{.NetworkSettings.IPAddress}}' simple-container-benchmarks)" \
 misterbisson/simple-container-benchmarks
