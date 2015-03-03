@@ -47,8 +47,8 @@ function ips(req, res, next) {
 
 	var output = "";
 
-	// the host from the request
-	output += "host: " + req.headers.host + "\n";
+	// the host from the request + what the server thinks its hostname is
+	output += "host: " + req.headers.host + " " + exec("hostname", {silent:true}).output;
 
 	// the ethernet interface IPs
 	// stolen from http://stackoverflow.com/a/8440736
