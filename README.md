@@ -30,61 +30,60 @@ dd if=/dev/urandom bs=1M count=256 | md5sum
 
 There are many valid criticisms of these methods of testing performance. I use them because they can be easily run on any unix-like system with no software to install.
 
-### What else is going on?
-
-The tests results are uploaded to a [Manta](https://www.joyent.com/object-storage) object store account defined at `docker run`. These results include some identifying details about the container and host, including memory and the results of `lscpu`.
-
-The environment variables and SSH key needed to connect Manta are passed in the `docker run`. The example command below is set to read these vars and the SSH key from the environment from which the `docker run` is executed. Be sure to modify these for the correct location of your ssh key, or if you want to send the benchmarks to different account.
-
 ### Where are the benchmarks?
 
-They're in Manta and in the `docker logs $container_id`.
+Check `docker logs $container_id`.
 
 ### Run
 
-Start the container with these args to send the Manta environment vars and SSH key:
+Start the server container:
 
 ```
-sudo docker run -d --restart=no \
--e "MANTA_URL=$MANTA_URL" \
--e "MANTA_USER=$MANTA_USER" \
--e "MANTA_SUBUSER=$MANTA_SUBUSER" \
--e "MANTA_KEY_ID=$MANTA_KEY_ID" \
--e "SKEY=`cat ~/.ssh/id_rsa`" \
--e "SKEYPUB=`cat ~/.ssh/id_rsa.pub`" \
+sudo docker run -d -p 80:80 --name=simple-container-benchmarks misterbisson/simple-container-benchmarks
+```
+
+Start the client container to read from the server we just started:
+
+```
+sudo docker run -d \
 -e "DOCKER_HOST=$DOCKER_HOST" \
+-e "TARGET=$(docker inspect --format='{{.NetworkSettings.IPAddress}}' simple-container-benchmarks)" \
 misterbisson/simple-container-benchmarks
 ```
 
-Use `printenv` to inspect the value of the environment variables the above `docker run` command args will send to the container.
+Note that I'm sending some additional environment vars there, including the docker host and the IP of the server container. I could use the `--link` argument, but my init script in the container is looking specifically for the `$TARGET` environment var.
 
-You can loop it to start three at a time:
+Note: I'm also using Docker as the discovery directory here. Watch how that gets more interesting as we run more containers...
+
+Running this takes a few minutes. You can check `docker logs $CONTAINERID` on the server to see some progress, and when the client container quits you can check the full log there.
+
+### Run it a lot
+
+One pass through isn't nearly as fun as three, or 30.
+
+Let's loop it to start the server and client three at a time:
 
 ```
-i=0; while [ $i -lt 3 ]; do sudo docker run -d --restart=no \
--e "MANTA_URL=$MANTA_URL" \
--e "MANTA_USER=$MANTA_USER" \
--e "MANTA_SUBUSER=$MANTA_SUBUSER" \
--e "MANTA_KEY_ID=$MANTA_KEY_ID" \
--e "SKEY=`cat ~/.ssh/id_rsa`" \
--e "SKEYPUB=`cat ~/.ssh/id_rsa.pub`" \
--e "DOCKER_HOST=$DOCKER_HOST" \
-misterbisson/simple-container-benchmarks; \
+i=0; while [ $i -lt 3 ]; \
+do sudo docker run -d  -p 80:80 --name=simple-container-benchmarks-server-$i misterbisson/simple-container-benchmarks && \
+sudo docker run -d -e "DOCKER_HOST=$DOCKER_HOST" -e "TARGET=$(docker inspect --format='{{.NetworkSettings.IPAddress}}' simple-container-benchmarks-server-$i)" --name=simple-container-benchmarks-client-$i misterbisson/simple-container-benchmarks;
 i=$[$i+1]; sleep 1; done
 ```
 
-Or, why not start 30?
+Oh, snap, maybe you got the following error?
 
 ```
-i=0; while [ $i -lt 30 ]; do sudo docker run -d --restart=no \
--e "MANTA_URL=$MANTA_URL" \
--e "MANTA_USER=$MANTA_USER" \
--e "MANTA_SUBUSER=$MANTA_SUBUSER" \
--e "MANTA_KEY_ID=$MANTA_KEY_ID" \
--e "SKEY=`cat ~/.ssh/id_rsa`" \
--e "SKEYPUB=`cat ~/.ssh/id_rsa.pub`" \
--e "DOCKER_HOST=$DOCKER_HOST" \
-misterbisson/simple-container-benchmarks; \
+FATA[0000] Error response from daemon: Cannot start container 8bfd697de55c09f0313d6d9ce546adbc0e187351858bb064a07007a2624da442: Bind for 0.0.0.0:80 failed: port is already allocated 
+```
+
+That error only makes sense if you don't expect the Docker API host to assign a unique IP for each container. You might even be used to that behavior, but that doesn't make it right.
+
+Try the same thing on Joyent's elastic Docker host. Heck, why not start 30?
+
+```
+i=0; while [ $i -lt 30 ]; \
+do sudo docker run -d  -p 80:80 --name=simple-container-benchmarks-server-$i misterbisson/simple-container-benchmarks && \
+sudo docker run -d -e "DOCKER_HOST=$DOCKER_HOST" -e "TARGET=$(docker inspect --format='{{.NetworkSettings.IPAddress}}' simple-container-benchmarks-server-$i)" --name=simple-container-benchmarks-client-$i misterbisson/simple-container-benchmarks;
 i=$[$i+1]; sleep 1; done
 ```
 
