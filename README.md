@@ -46,7 +46,7 @@ Start the client container to read from the server we just started:
 
 ```
 sudo docker run -d \
- --name=simple-container-benchmarks-client \
+--name=simple-container-benchmarks-client \
 -e "DOCKER_HOST=$DOCKER_HOST" \
 -e "TARGET=$(docker inspect --format='{{.NetworkSettings.IPAddress}}' simple-container-benchmarks)" \
 misterbisson/simple-container-benchmarks
