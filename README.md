@@ -66,7 +66,7 @@ Let's loop it to start the server and client three at a time:
 ```
 i=0; while [ $i -lt 3 ]; \
 do sudo docker run -d  -p 80:80 --name=simple-container-benchmarks-server-$i misterbisson/simple-container-benchmarks && \
-sudo docker run -d -e "DOCKER_HOST=$DOCKER_HOST" -e "TARGET=$(docker inspect --format='{{.NetworkSettings.IPAddress}}' simple-container-benchmarks-server-$i)" --name=simple-container-benchmarks-client-$i misterbisson/simple-container-benchmarks;
+sudo docker run -d -e "DOCKER_HOST=$DOCKER_HOST" -e "TARGET=$(docker inspect --format='{{.NetworkSettings.IPAddress}}' simple-container-benchmarks-server-$i)" --name=simple-container-benchmarks-client-$i misterbisson/simple-container-benchmarks; \
 i=$[$i+1]; sleep 1; done
 ```
 
@@ -83,7 +83,7 @@ Try the same thing on Joyent's elastic Docker host. Heck, why not start 30?
 ```
 i=0; while [ $i -lt 30 ]; \
 do sudo docker run -d  -p 80:80 --name=simple-container-benchmarks-server-$i misterbisson/simple-container-benchmarks && \
-sudo docker run -d -e "DOCKER_HOST=$DOCKER_HOST" -e "TARGET=$(docker inspect --format='{{.NetworkSettings.IPAddress}}' simple-container-benchmarks-server-$i)" --name=simple-container-benchmarks-client-$i misterbisson/simple-container-benchmarks;
+sudo docker run -d -e "DOCKER_HOST=$DOCKER_HOST" -e "TARGET=$(docker inspect --format='{{.NetworkSettings.IPAddress}}' simple-container-benchmarks-server-$i)" --name=simple-container-benchmarks-client-$i misterbisson/simple-container-benchmarks; \
 i=$[$i+1]; sleep 1; done
 ```
 
