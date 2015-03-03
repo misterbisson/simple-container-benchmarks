@@ -5,8 +5,8 @@ var exec = require('shelljs').exec;
 server.get('/disk', disk);
 function disk(req, res, next) {
 	console.log('/disk request');
-	var thing = exec("$((dd bs=1M count=1024 if=/dev/zero of=~/simple-container-benchmarks-writetest conv=fdatasync) 2>&1 | tail -1 | sed -e 's/^ *//' -e 's/ *$//')", {silent:true}).output;
-	exec("rm ~/simple-container-benchmarks-writetest", {silent:true}).output;
+	var thing = exec("(dd bs=1M count=1024 if=/dev/zero of=/simple-container-benchmarks-writetest conv=fdatasync) 2>&1 | tail -1 | sed -e 's/^ *//' -e 's/ *$//'", {silent:true}).output;
+	exec("rm /simple-container-benchmarks-writetest", {silent:true}).output;
 
 	console.log(thing);
 
@@ -18,7 +18,7 @@ function disk(req, res, next) {
 server.get('/cpu', cpu);
 function cpu(req, res, next) {
 	console.log('/cpu request');
-	var thing = exec("$((dd if=/dev/urandom bs=1M count=1 | md5sum) 2>&1 >/dev/null | tail -1 | sed -e 's/^ *//' -e 's/ *$//')", {silent:true}).output;
+	var thing = exec("(dd if=/dev/urandom bs=1M count=256 | md5sum) 2>&1 >/dev/null | tail -1 | sed -e 's/^ *//' -e 's/ *$//'", {silent:true}).output;
 
 	console.log(thing);
 
