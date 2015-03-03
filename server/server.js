@@ -41,6 +41,46 @@ function info(req, res, next) {
 	next();
 }
 
+server.get('/ips', ips);
+function ips(req, res, next) {
+	console.log('/ips request');
+
+	var output = "";
+
+	// the host from the request
+	output += "host: " + req.headers.host + "\n";
+
+	// the ethernet interface IPs
+	// stolen from http://stackoverflow.com/a/8440736
+	var os = require('os');
+	var ifaces = os.networkInterfaces();
+
+	Object.keys(ifaces).forEach(function (ifname) {
+		var alias = 0;
+
+		ifaces[ifname].forEach(function (iface) {
+			if ('IPv4' !== iface.family || iface.internal !== false) {
+				// skip over internal (i.e. 127.0.0.1) and non-ipv4 addresses
+				return;
+			}
+
+			if (alias >= 1) {
+				// this single interface has multiple ipv4 addresses
+				output += ifname + ':' + alias + ': ' + iface.address + "\n";
+			} else {
+				// this interface has only one ipv4 adress
+				output += ifname + ': ' + iface.address + "\n";
+			}
+		});
+	});
+
+	console.log(output);
+
+	res.setHeader('content-type', 'text/plain');
+	res.send(output);
+	next();
+}
+
 server.listen(80, function() {
 	console.log('%s listening at %s', server.name, server.url);
 });

@@ -1,17 +1,5 @@
 #!/bin/bash 
 
-
-# create the necessary key files based on env vars provided in the docker run command
-# ...but don't do anything if the vars are unset
-if [[ -n $SKEY && -n SKEYPUB ]]
-then
-    mkdir ~/.ssh
-    echo -e "$SKEY" > ~/.ssh/id_rsa
-    echo -e "$SKEYPUB" > ~/.ssh/id_rsa.pub
-    chmod 600 ~/.ssh/id_rsa*
-fi
-
-
 # prep the file where we save our output
 touch ~/simple-container-benchmarks.txt # create it if it doesn't exist
 cat /dev/null > ~/simple-container-benchmarks.txt # truncate it, if the file has previous content in it
