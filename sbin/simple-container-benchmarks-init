@@ -1,0 +1,13 @@
+#!/bin/bash 
+
+# if we don't have a target var, then we're running in server mode
+# ...so start node
+if [[ ! -n "$TARGET" ]]
+then
+    node /server/server.js
+    # the following hack should keep the container active
+    # per http://kimh.github.io/blog/en/docker/gotchas-in-writing-dockerfile-en/
+    tail -f /dev/null
+else
+    /usr/local/sbin/simple-container-benchmarks
+fi
