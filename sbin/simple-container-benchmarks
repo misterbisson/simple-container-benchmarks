@@ -1,64 +1,51 @@
-#!/bin/bash 
+#!/bin/bash
 
 # prep the file where we save our output
-touch ~/simple-container-benchmarks.txt # create it if it doesn't exist
-cat /dev/null > ~/simple-container-benchmarks.txt # truncate it, if the file has previous content in it
+touch /simple-container-benchmarks.txt # create it if it doesn't exist
+cat /dev/null > /simple-container-benchmarks.txt # truncate it, if the file has previous content in it
 
 
 # system identification
-echo '------------------------------' >> ~/simple-container-benchmarks.txt
-echo 'Performance benchmarks' >> ~/simple-container-benchmarks.txt
-echo '------------------------------' >> ~/simple-container-benchmarks.txt
-echo 'hostname: '$(hostname) >> ~/simple-container-benchmarks.txt
-echo "dockerhost: $DOCKER_HOST" >> ~/simple-container-benchmarks.txt
-echo 'date: '$(date) >> ~/simple-container-benchmarks.txt
+echo '------------------------------' >> /simple-container-benchmarks.txt
+echo 'Performance benchmarks' >> /simple-container-benchmarks.txt
+echo '------------------------------' >> /simple-container-benchmarks.txt
+echo "dockerhost: $DOCKER_HOST" >> /simple-container-benchmarks.txt
+curl http://$TARGET/ips >> /simple-container-benchmarks.txt
+echo 'date: '$(date) >> /simple-container-benchmarks.txt
 
 
 # get disk performance stats
-echo '' >> ~/simple-container-benchmarks.txt
-echo '------------------------------' >> ~/simple-container-benchmarks.txt
-echo 'FS write performance' >> ~/simple-container-benchmarks.txt
-echo '------------------------------' >> ~/simple-container-benchmarks.txt
+echo '' >> /simple-container-benchmarks.txt
+echo '------------------------------' >> /simple-container-benchmarks.txt
+echo 'FS write performance' >> /simple-container-benchmarks.txt
+echo '------------------------------' >> /simple-container-benchmarks.txt
 prefix='disk: '
 COUNTER=0
-while [  $COUNTER -lt 10 ]; do
-    value=$((dd bs=1M count=1024 if=/dev/zero of=~/simple-container-benchmarks-writetest conv=fdatasync) 2>&1 | tail -1 | sed -e 's/^ *//' -e 's/ *$//')
-    echo $prefix$value >> ~/simple-container-benchmarks.txt
-    let COUNTER=COUNTER+1 
+while [	 $COUNTER -lt 10 ]; do
+	curl http://$TARGET/disk >> /simple-container-benchmarks.txt
+	let COUNTER=COUNTER+1
 done
-rm ~/simple-container-benchmarks-writetest
 
 
 # get processor performance stats
-echo '' >> ~/simple-container-benchmarks.txt
-echo '------------------------------' >> ~/simple-container-benchmarks.txt
-echo 'CPU performance' >> ~/simple-container-benchmarks.txt
-echo '------------------------------' >> ~/simple-container-benchmarks.txt
+echo '' >> /simple-container-benchmarks.txt
+echo '------------------------------' >> /simple-container-benchmarks.txt
+echo 'CPU performance' >> /simple-container-benchmarks.txt
+echo '------------------------------' >> /simple-container-benchmarks.txt
 prefix='proc: '
 COUNTER=0
-while [  $COUNTER -lt 10 ]; do
-    value=$((dd if=/dev/urandom bs=1M count=256 | md5sum) 2>&1 >/dev/null | tail -1 | sed -e 's/^ *//' -e 's/ *$//')
-    echo $prefix$value >> ~/simple-container-benchmarks.txt
-    let COUNTER=COUNTER+1 
+while [	 $COUNTER -lt 10 ]; do
+	curl http://$TARGET/cpu >> /simple-container-benchmarks.txt
+	let COUNTER=COUNTER+1
 done
 
 
 # get system info
-echo '' >> ~/simple-container-benchmarks.txt
-echo '------------------------------' >> ~/simple-container-benchmarks.txt
-echo 'System info' >> ~/simple-container-benchmarks.txt
-echo '------------------------------' >> ~/simple-container-benchmarks.txt
-#mem=$(free | awk '/^Mem:/{print $2}')
-free | head -2 >> ~/simple-container-benchmarks.txt
-lscpu >> ~/simple-container-benchmarks.txt
-
-# get the name for the file when we upload to Manta
-destfilesuffix='.txt'
-destfile=$(echo $(date)$(hostname) | md5sum | sed -e 's/  -$//')$destfilesuffix
-
-# move the file to Manta
-mmkdir ~~/stor/simple-container-benchmarks
-mput -f ~/simple-container-benchmarks.txt ~~/stor/simple-container-benchmarks/$destfile
+echo '' >> /simple-container-benchmarks.txt
+echo '------------------------------' >> /simple-container-benchmarks.txt
+echo 'System info' >> /simple-container-benchmarks.txt
+echo '------------------------------' >> /simple-container-benchmarks.txt
+curl http://$TARGET/info >> /simple-container-benchmarks.txt
 
 # report
-cat ~/simple-container-benchmarks.txt
+cat /simple-container-benchmarks.txt
