@@ -15,4 +15,4 @@ RUN cd /server && npm install
 # expose port 80 for the node server
 EXPOSE 80
 
-CMD ['node', '/server/server.js']
+CMD ["node", "/server/server.js"]
