@@ -51,7 +51,7 @@ Start the client container to read from the server we just started:
 docker run -d \
 --name=simple-container-benchmarks-client \
 -e "DOCKER_HOST=$DOCKER_HOST" \
--e "TARGET=$(docker inspect --format='{{.NetworkSettings.IPAddress}}' simple-container-benchmarks)" \
+-e "TARGET=$(docker inspect --format='{{.NetworkSettings.IPAddress}}' simple-container-benchmarks-server)" \
 misterbisson/simple-container-benchmarks
 ```
 
@@ -90,6 +90,10 @@ do docker run -d  -p 80:80 --name=simple-container-benchmarks-server-$i misterbi
 docker run -d -e "DOCKER_HOST=$DOCKER_HOST" -e "TARGET=$(docker inspect --format='{{.NetworkSettings.IPAddress}}' simple-container-benchmarks-server-$i)" --name=simple-container-benchmarks-client-$i misterbisson/simple-container-benchmarks; \
 i=$[$i+1]; sleep 1; done
 ```
+
+Each iteration through the loop spins up a server container, and if that goes successfully, it will spin up a client container as well. Take note of `-e "TARGET=$(docker inspect --format='{{.NetworkSettings.IPAddress}}' simple-container-benchmarks-server-$i)"` in the command to spin up the client container. That checks the Docker API for a container named `simple-container-benchmarks-server-$i`, gets the IP address for it, and inserts that IP in the `$TARGET` environment variable.
+
+Using the Docker API as the directory for service discovery works well if the containers are named predictably (a "good" container name would probably be `$app-$version-$service`, or similar) _and_ if the Docker API can be trusted to know about _all_ the containers. That's exactly how it works on Joyent's elastic Docker host: the entire data center is a single host, and the API reports on all the containers running across all the physical compute nodes.
 
 ### Build
 

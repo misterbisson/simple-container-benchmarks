@@ -19,7 +19,6 @@ echo '' >> /simple-container-benchmarks.txt
 echo '------------------------------' >> /simple-container-benchmarks.txt
 echo 'FS write performance' >> /simple-container-benchmarks.txt
 echo '------------------------------' >> /simple-container-benchmarks.txt
-prefix='disk: '
 COUNTER=0
 while [	 $COUNTER -lt 10 ]; do
 	curl http://$TARGET/disk >> /simple-container-benchmarks.txt
@@ -27,12 +26,27 @@ while [	 $COUNTER -lt 10 ]; do
 done
 
 
+# get network performance stats
+echo '' >> /simple-container-benchmarks.txt
+echo '------------------------------' >> /simple-container-benchmarks.txt
+echo 'Network performance' >> /simple-container-benchmarks.txt
+echo '------------------------------' >> /simple-container-benchmarks.txt
+prefix='network: '
+COUNTER=0
+while [	 $COUNTER -lt 10 ]; do
+	value=$(iperf -c $TARGET -i 1)
+	echo $prefix$value >> ~/simple-container-benchmarks.txt
+	let COUNTER=COUNTER+1
+done
+
+
+iperf -c 172.17.0.159 -i 1
+
 # get processor performance stats
 echo '' >> /simple-container-benchmarks.txt
 echo '------------------------------' >> /simple-container-benchmarks.txt
 echo 'CPU performance' >> /simple-container-benchmarks.txt
 echo '------------------------------' >> /simple-container-benchmarks.txt
-prefix='proc: '
 COUNTER=0
 while [	 $COUNTER -lt 10 ]; do
 	curl http://$TARGET/cpu >> /simple-container-benchmarks.txt

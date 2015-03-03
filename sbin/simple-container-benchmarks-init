@@ -5,9 +5,7 @@
 if [[ ! -n "$TARGET" ]]
 then
     node /server/server.js
-    # the following hack should keep the container active
-    # per http://kimh.github.io/blog/en/docker/gotchas-in-writing-dockerfile-en/
-    tail -f /dev/null
+    iperf -s
 else
     /usr/local/sbin/simple-container-benchmarks
 fi
