@@ -28,17 +28,17 @@ done
 
 
 # get network performance stats
-echo '' >> /simple-container-benchmarks.txt
-echo '------------------------------' >> /simple-container-benchmarks.txt
-echo 'Network performance' >> /simple-container-benchmarks.txt
-echo '------------------------------' >> /simple-container-benchmarks.txt
-prefix='network: '
-COUNTER=0
-while [	 $COUNTER -lt 10 ]; do
-	value=$(iperf -c $TARGET -i 2)
-	echo $prefix$value >> ~/simple-container-benchmarks.txt
-	let COUNTER=COUNTER+1
-done
+# echo '' >> /simple-container-benchmarks.txt
+# echo '------------------------------' >> /simple-container-benchmarks.txt
+# echo 'Network performance' >> /simple-container-benchmarks.txt
+# echo '------------------------------' >> /simple-container-benchmarks.txt
+# prefix='network: '
+# COUNTER=0
+# while [	 $COUNTER -lt 10 ]; do
+# 	value=$(iperf -c $TARGET -i 2)
+# 	echo $prefix$value >> ~/simple-container-benchmarks.txt
+# 	let COUNTER=COUNTER+1
+# done
 
 
 
