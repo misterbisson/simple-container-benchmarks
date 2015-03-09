@@ -10,4 +10,5 @@ else
 	echo 'Client mode...'
 	echo "Target: $TARGET"
 	/usr/local/sbin/simple-container-benchmarks
+	iperf -s
 fi
