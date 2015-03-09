@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # if we don't have a target var, then we're running in server mode
-# ...so start iperf, otherwise we start the client script
+# ...so start node and iperf
 if [[ ! -n "$TARGET" ]]
 then
 	node /server/server.js && iperf -s
