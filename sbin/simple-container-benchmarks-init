@@ -1,13 +1,10 @@
 #!/bin/bash
 
-# start our node server, regardless of whether we're running in client or server mode
-node /server/server.js &
-
 # if we don't have a target var, then we're running in server mode
-# ...so start iperf, otherwise we start the client script
+# ...so start node and iperf
 if [[ ! -n "$TARGET" ]]
 then
-	iperf -s
+	node /server/server.js && iperf -s
 else
 	/usr/local/sbin/simple-container-benchmarks
 fi
