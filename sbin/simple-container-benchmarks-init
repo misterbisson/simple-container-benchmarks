@@ -4,7 +4,11 @@
 # ...so start node and iperf
 if [[ ! -n "$TARGET" ]]
 then
+	echo 'Server mode...'
 	node /server/server.js && iperf -s
 else
+	echo 'Client mode...'
+	echo "Target: $TARGET"
 	/usr/local/sbin/simple-container-benchmarks
+	iperf -s
 fi
