@@ -10,7 +10,7 @@ echo '------------------------------' >> /simple-container-benchmarks.txt
 echo 'Performance benchmarks' >> /simple-container-benchmarks.txt
 echo '------------------------------' >> /simple-container-benchmarks.txt
 echo "dockerhost: $DOCKER_HOST" >> /simple-container-benchmarks.txt
-curl -sS http://$TARGET/ips >> /simple-container-benchmarks.txt
+curl -sS http://$TARGET/ips >> /simple-container-benchmarks.txt || echo 'curl: failed to connect' >> /simple-container-benchmarks.txt
 echo 'date: '$(date) >> /simple-container-benchmarks.txt
 
 
@@ -21,7 +21,7 @@ echo 'FS write performance' >> /simple-container-benchmarks.txt
 echo '------------------------------' >> /simple-container-benchmarks.txt
 COUNTER=0
 while [	 $COUNTER -lt 10 ]; do
-	curl -sS http://$TARGET/disk >> /simple-container-benchmarks.txt
+	curl -sS http://$TARGET/disk >> /simple-container-benchmarks.txt || echo 'curl: failed to connect' >> /simple-container-benchmarks.txt
 	let COUNTER=COUNTER+1
 done
 
@@ -34,7 +34,7 @@ echo 'CPU performance' >> /simple-container-benchmarks.txt
 echo '------------------------------' >> /simple-container-benchmarks.txt
 COUNTER=0
 while [	 $COUNTER -lt 10 ]; do
-	curl -sS http://$TARGET/cpu >> /simple-container-benchmarks.txt
+	curl -sS http://$TARGET/cpu >> /simple-container-benchmarks.txt || echo 'curl: failed to connect' >> /simple-container-benchmarks.txt
 	let COUNTER=COUNTER+1
 done
 
@@ -45,7 +45,7 @@ echo '' >> /simple-container-benchmarks.txt
 echo '------------------------------' >> /simple-container-benchmarks.txt
 echo 'System info' >> /simple-container-benchmarks.txt
 echo '------------------------------' >> /simple-container-benchmarks.txt
-curl -sS http://$TARGET/info >> /simple-container-benchmarks.txt
+curl -sS http://$TARGET/info >> /simple-container-benchmarks.txt || echo 'curl: failed to connect' >> /simple-container-benchmarks.txt
 
 # report
 cat /simple-container-benchmarks.txt
