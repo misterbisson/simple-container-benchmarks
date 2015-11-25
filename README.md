@@ -1,5 +1,8 @@
 # Simple Container Benchmarks
 
+[![DockerPulls](https://img.shields.io/docker/pulls/misterbisson/simple-container-benchmarks.svg)](https://registry.hub.docker.com/u/misterbisson/simple-container-benchmarks/)
+[![DockerStars](https://img.shields.io/docker/stars/misterbisson/simple-container-benchmarks.svg)](https://registry.hub.docker.com/u/misterbisson/simple-container-benchmarks/)
+
 Run some simple benchmarks on computational and filesystem write performance. The benchmarks are simplistic and probably don't represent workloads in your app.
 
 It's likely that all benchmarking tools suffer fundamental flaws, this is no exception. Consider the following:
