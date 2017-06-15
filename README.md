@@ -46,6 +46,7 @@ docker run -d \
 -p 80:80 \
 -p 5001:5001 \
 --name=simple-container-benchmarks-server \
+-v ${PWD}/bench:/benchmarks \
 misterbisson/simple-container-benchmarks
 ```
 
@@ -103,4 +104,10 @@ Using the Docker API as the directory for service discovery works well if the co
 
 ```
 docker build -t misterbisson/simple-container-benchmarks .
+```
+
+### Swarm mode
+
+```
+docker stack deploy -c docker-compose.yml bench
 ```
