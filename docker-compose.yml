@@ -1,0 +1,13 @@
+version: '3'
+services :
+  web-bench:
+    image: cl3m3nt/simple-container-benchmarks 
+    ports:
+      - 80:80
+    volumes:
+        - data:/benchmarks
+    deploy:
+      mode: replicated
+      replicas: 1
+volumes:
+   data:
